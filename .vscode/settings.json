@@ -1,0 +1,6 @@
+{
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}",
+        "--query-driver=C:/Users/abhis/.platformio/packages/toolchain-xtensa-esp32s3/bin/xtensa-esp32s3-elf-*"
+    ]
+}

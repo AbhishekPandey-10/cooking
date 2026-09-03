@@ -50,7 +50,6 @@
 #include "sensor_manager.h"
 #include "sensor_types.h"
 #include "sampling_scheduler.h"
-#include "i2c_recovery.h"
 
 #include "safety_engine.h"
 #include "correlator.h"
@@ -75,9 +74,6 @@ namespace MainConfig {
 
     // BLE device ID (unique per wearable — flash-configurable in production)
     constexpr uint16_t BLE_DEVICE_ID        = 0xA1B2;
-
-    // MQ135 warm-up period before trusting readings
-    constexpr uint32_t MQ135_WARMUP_MS      = 90000;   // 90 seconds
 
     // Maximum consecutive I2C failures before triggering bus recovery
     constexpr uint8_t  I2C_FAIL_RECOVERY    = 3;
@@ -135,6 +131,7 @@ static void build_timestamp(char *buf, size_t cap, uint32_t uptime_ms);
 //  setup() — Boot Sequence
 //
 // ============================================================================
+#ifndef PIO_UNIT_TESTING
 void setup()
 {
     // ---- Serial (USB-CDC debug output) -------------------------------------
@@ -268,6 +265,7 @@ void loop()
         update_display(frame, now);
     }
 }
+#endif // !PIO_UNIT_TESTING
 
 // ============================================================================
 //
@@ -344,7 +342,7 @@ static void run_eval_tick(uint32_t now)
 
     // ---- Correlator Tick (Phase 4.5) ---------------------------------------
     bool mq135_valid = f.env.mq135_valid &&
-                       ((now - s_boot_ms) >= MainConfig::MQ135_WARMUP_MS);
+                       ((now - s_boot_ms) >= MQ135_WARMUP_MS);
 
     CorrelatorResult cr = g_correlator.tick(
         spo2,

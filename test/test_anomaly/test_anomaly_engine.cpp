@@ -1,4 +1,5 @@
 #include <unity.h>
+#include <Arduino.h>
 #include <cmath>
 
 #include "feature_extract.h"
@@ -385,7 +386,7 @@ void test_engine_handles_partial_invalid()
     float conf = eng.evaluate(fv, t);
     TEST_ASSERT_TRUE(eng.state() == AnomalyState::ACTIVE);
     // Should have substituted with baseline means — not NaN
-    TEST_ASSERT_FALSE(std::isnan(conf));
+    TEST_ASSERT_FALSE(isnan(conf));
 }
 
 void test_engine_suspends_on_too_many_invalid()

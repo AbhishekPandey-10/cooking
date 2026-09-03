@@ -1,4 +1,5 @@
 #include <unity.h>
+#include <Arduino.h>
 #include <cmath>
 
 #include "safety_types.h"

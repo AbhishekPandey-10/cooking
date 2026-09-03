@@ -5,7 +5,9 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-// ---- Sensor libraries -------------------------------------------------------
+// SparkFun MAX3010x library defines I2C_BUFFER_LENGTH 32 without an #ifndef guard,
+// conflicting with ESP32 Wire.h (128). Undefine it first to avoid redefinition warning.
+#undef I2C_BUFFER_LENGTH
 #include <MAX30105.h>              // SparkFun MAX3010x library
 #include <MPU6050.h>               // ElectronicCats MPU6050
 #include <Protocentral_MAX30205.h> // Protocentral MAX30205

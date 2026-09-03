@@ -448,7 +448,8 @@ void DegradedSos::tick(uint32_t now_ms)
         break;
 
     // ---- SMS_CMD: AT+CMGS="<number>" → wait for prompt ---------------------
-    case SosPhase::SMS_CMD: {
+    case SosPhase::SMS_CMD:
+    case SosPhase::SMS_PROMPT_WAIT: {
         if (!cmd_sent_) {
             char cmd[SosConfig::AT_CMD_BUF];
             snprintf(cmd, sizeof(cmd), "AT+CMGS=\"%s\"", phone_);
