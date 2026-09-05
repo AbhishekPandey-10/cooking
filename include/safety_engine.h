@@ -2,7 +2,6 @@
 #define SAFETY_ENGINE_H
 
 #include "safety_types.h"
-#include "heat_index.h"
 #include "fall_detector.h"
 #include "ppg_qualify.h"
 

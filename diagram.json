@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "author": "Abhi",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-s3-devkitc-1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {
+        "flashSize": "8",
+        "psramSize": "8"
+      }
+    },
+    {
+      "type": "wokwi-mpu6050",
+      "id": "imu",
+      "top": -90,
+      "left": 320,
+      "attrs": {}
+    },
+    {
+      "type": "board-ssd1306",
+      "id": "oled",
+      "top": 60,
+      "left": 320,
+      "attrs": {
+        "i2cAddress": "0x3c"
+      }
+    },
+    {
+      "type": "chip-bme280",
+      "id": "env",
+      "top": 210,
+      "left": 320,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "mq135",
+      "top": 360,
+      "left": 320,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+
+    [ "imu:VCC", "esp:3V3.1", "red", [ "h0" ] ],
+    [ "imu:GND", "esp:GND.1", "black", [ "h0" ] ],
+    [ "esp:8", "imu:SDA", "green", [ "h0" ] ],
+    [ "esp:9", "imu:SCL", "yellow", [ "h0" ] ],
+
+    [ "oled:VCC", "esp:3V3.1", "red", [ "h0" ] ],
+    [ "oled:GND", "esp:GND.1", "black", [ "h0" ] ],
+    [ "esp:8", "oled:SDA", "green", [ "h0" ] ],
+    [ "esp:9", "oled:SCL", "yellow", [ "h0" ] ],
+
+    [ "env:Vdd", "esp:3V3.1", "red", [ "h0" ] ],
+    [ "env:Vddio", "esp:3V3.1", "red", [ "h0" ] ],
+    [ "env:CS", "esp:3V3.1", "red", [ "h0" ] ],
+    [ "env:SDO", "esp:GND.1", "black", [ "h0" ] ],
+    [ "env:GND", "esp:GND.1", "black", [ "h0" ] ],
+    [ "esp:8", "env:SDI", "green", [ "h0" ] ],
+    [ "esp:9", "env:SCK", "yellow", [ "h0" ] ],
+
+    [ "mq135:VCC", "esp:3V3.1", "red", [ "h0" ] ],
+    [ "mq135:GND", "esp:GND.1", "black", [ "h0" ] ],
+    [ "mq135:SIG", "esp:1", "orange", [ "h0" ] ]
+  ],
+  "dependencies": {
+    "chip-bme280": "github:bonnyr/wokwi-bme280-custom-chip@0.0.25"
+  },
+  "serialMonitor": {
+    "display": "always",
+    "newline": "lf"
+  }
+}

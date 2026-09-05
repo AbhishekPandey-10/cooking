@@ -66,19 +66,19 @@ void scheduler_init()
     // Core 2.x: APB clock 80 MHz, divider 80 -> 1 MHz (1 tick = 1 µs)
     s_timer_ppg = timerBegin(0, 80, true);
     if (s_timer_ppg) {
-        timerAttachInterrupt(s_timer_ppg, &isr_ppg, true);
+        timerAttachInterrupt(s_timer_ppg, &isr_ppg, false);
         timerAlarmWrite(s_timer_ppg, MAX30102_SAMPLE_US, true);
         timerAlarmEnable(s_timer_ppg);
-        Serial.printf("[SCHED] PPG  timer: %d µs period\n", MAX30102_SAMPLE_US);
+        Serial.printf("[SCHED] PPG  timer: %d µs period\r\n", MAX30102_SAMPLE_US);
     }
 
     // ---- Hardware timer 1: MPU6050 at 100 Hz (10 000 µs) -------------------
     s_timer_imu = timerBegin(1, 80, true);
     if (s_timer_imu) {
-        timerAttachInterrupt(s_timer_imu, &isr_imu, true);
+        timerAttachInterrupt(s_timer_imu, &isr_imu, false);
         timerAlarmWrite(s_timer_imu, MPU6050_SAMPLE_US, true);
         timerAlarmEnable(s_timer_imu);
-        Serial.printf("[SCHED] IMU  timer: %d µs period\n", MPU6050_SAMPLE_US);
+        Serial.printf("[SCHED] IMU  timer: %d µs period\r\n", MPU6050_SAMPLE_US);
     }
 #endif
 

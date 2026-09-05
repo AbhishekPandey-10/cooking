@@ -152,7 +152,7 @@ void setup()
     if (sensor_mask == SENSOR_ALL) {
         Serial.println(F("[MAIN] All sensors online"));
     } else {
-        Serial.printf("[MAIN] WARNING — sensors offline (mask 0x%02X)\n",
+        Serial.printf("[MAIN] WARNING — sensors offline (mask 0x%02X)\r\n",
                       sensor_mask);
         if (!(sensor_mask & SENSOR_MAX30102))
             Serial.println(F("[MAIN]   MAX30102 (PPG/SpO2) FAILED"));
@@ -196,7 +196,7 @@ void setup()
     // ---- Fixed position (no GPS — set per deployment or via BLE config) ----
     s_last_lat = 28.6139f;   // Default: New Delhi
     s_last_lon = 77.2090f;
-    Serial.printf("[MAIN] Fixed position: %.4f, %.4f\n", s_last_lat, s_last_lon);
+    Serial.printf("[MAIN] Fixed position: %.4f, %.4f\r\n", s_last_lat, s_last_lon);
 
     // ---- Boot complete -----------------------------------------------------
     Serial.println(F("[MAIN] ════════════════════════════════════════"));
@@ -365,7 +365,7 @@ static void run_eval_tick(uint32_t now)
     if ((now - s_last_status_log) >= 10000) {
         s_last_status_log = now;
         Serial.printf("[EVAL] PPG=%s SpO2=%ld Fall=%s HI=%.1f°C "
-                      "Anomaly=%.2f(%s) Corr=%d/4 SOS=%s\n",
+                      "Anomaly=%.2f(%s) Corr=%d/4 SOS=%s\r\n",
             g_safety.ppg_status_string(),
             (long)spo2,
             g_safety.is_fall_detected() ? "YES" : "no",
@@ -407,14 +407,14 @@ static void handle_sos_trigger(CorrelatorResult result, uint32_t now)
             alert_code = BleRelayConfig::ALERT_CARDIAC;      // 0x02
             strncpy(s_last_alert_text, "SPO2 CRITICAL", sizeof(s_last_alert_text));
         }
-        Serial.printf("[SOS] *** PATH A HARD BYPASS: %s ***\n", s_last_alert_text);
+        Serial.printf("[SOS] *** PATH A HARD BYPASS: %s ***\r\n", s_last_alert_text);
         break;
 
     case CorrelatorResult::PATH_B_CORRELATED:
         alert_code = BleRelayConfig::ALERT_HEAT_GAS;         // 0x03
         snprintf(s_last_alert_text, sizeof(s_last_alert_text),
                  "CORR %s", g_correlator.last_trigger_description());
-        Serial.printf("[SOS] *** PATH B CORRELATED: %s ***\n",
+        Serial.printf("[SOS] *** PATH B CORRELATED: %s ***\r\n",
                       g_correlator.last_trigger_description());
         break;
 
@@ -433,7 +433,7 @@ static void handle_sos_trigger(CorrelatorResult result, uint32_t now)
     g_sos.request_sos(s_last_lat, s_last_lon, alert_code,
                       s_last_alert_text, ts);
 
-    Serial.printf("[SOS] Dispatched: lat=%.4f lon=%.4f code=0x%02X\n",
+    Serial.printf("[SOS] Dispatched: lat=%.4f lon=%.4f code=0x%02X\r\n",
                   s_last_lat, s_last_lon, alert_code);
 }
 
@@ -486,7 +486,7 @@ static void on_ble_relay_received(const EmergencyPayload &payload)
     float lon = decode_coord(payload.trunc_lon);
 
     Serial.printf("[RELAY] Forwarding peer SOS: devid=0x%04X alert=0x%02X "
-                  "lat=%.4f lon=%.4f\n",
+                  "lat=%.4f lon=%.4f\r\n",
                   payload.device_id, payload.alert_code, lat, lon);
 
     // Build relay timestamp

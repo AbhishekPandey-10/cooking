@@ -269,10 +269,8 @@ void test_three_flags_fires_alert()
     Correlator c;
     tick_normal(c, 0);
 
-    tick_optical(c, 1000);
-    tick_heat(c, 2000);
-    CorrelatorResult r = tick_thermal(c, 3000);
-    // Already 3-of-4 — must fire
+    // 3 flags simultaneously: optical (SpO2 91) + heat (HI 42°C) + thermal (28°C)
+    CorrelatorResult r = c.tick(91, true, false, 42.0f, 200, false, 28.0f, 1000);
     TEST_ASSERT_TRUE(r == CorrelatorResult::PATH_B_CORRELATED);
 }
 

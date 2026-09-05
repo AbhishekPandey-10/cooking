@@ -49,7 +49,7 @@ static bool safe_i2c_transaction(uint8_t addr)
     if (err == 0) return true;
 
     // Attempt recovery once
-    Serial.printf("[SENSOR] I2C error %d on 0x%02X — attempting recovery\n",
+    Serial.printf("[SENSOR] I2C error %d on 0x%02X — attempting recovery\r\n",
                   err, addr);
     if (i2c_bus_recover()) {
         Wire.beginTransmission(addr);
@@ -138,7 +138,7 @@ uint8_t sensors_init()
     //  The heater is powered continuously via Vcc; we just configure the ADC.
     analogReadResolution(MQ135_ADC_RESOLUTION);
     pinMode(MQ135_ANALOG_PIN, INPUT);
-    Serial.printf("[SENSOR] MQ135 ADC ready — blackout for %d s\n",
+    Serial.printf("[SENSOR] MQ135 ADC ready — blackout for %d s\r\n",
                   MQ135_WARMUP_MS / 1000);
 
     // ---- SSD1306 OLED display ----------------------------------------------

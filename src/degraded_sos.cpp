@@ -332,7 +332,10 @@ void DegradedSos::tick(uint32_t now_ms)
     // Always process any available serial data for the AT engine
     at_.process(now_ms);
 
-    switch (phase_) {
+    for (uint8_t pass = 0; pass < 3; pass++) {
+        SosPhase prev_phase = phase_;
+
+        switch (phase_) {
 
     // ---- IDLE: nothing to do -----------------------------------------------
     case SosPhase::IDLE:
@@ -530,6 +533,12 @@ void DegradedSos::tick(uint32_t now_ms)
         break;
 
     } // switch
+
+        if (phase_ == prev_phase || phase_ == SosPhase::SMS_BODY_SEND ||
+            phase_ == SosPhase::POWERING_OFF) {
+            break;
+        }
+    } // for pass
 }
 
 // ============================================================================
@@ -539,6 +548,9 @@ void DegradedSos::tick(uint32_t now_ms)
 void DegradedSos::transition(SosPhase next, uint32_t now_ms)
 {
     log("[SOS] %s -> %s\n", phase_name(phase_), phase_name(next));
+    if (next == SosPhase::POWERING_OFF) {
+        set_modem_power(false);
+    }
     phase_       = next;
     phase_start_ = now_ms;
     cmd_sent_    = false;

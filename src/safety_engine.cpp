@@ -1,4 +1,5 @@
 #include "safety_engine.h"
+#include "heat_index.h"
 #include <cmath>
 
 // ============================================================================
